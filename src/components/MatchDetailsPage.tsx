@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, Play, BarChart3, Menu, Clock, CheckSquare, Gamepad2, Brain } from 'lucide-react';
 import AISummaryModal from './AISummaryModal';
-import { getMatchSummary } from '../lib/firestore';
+import { getMatchSummary } from '../lib/firebaseFunctions';
 
 const MatchDetailsPage: React.FC = () => {
   const [isAISummaryOpen, setIsAISummaryOpen] = useState(false);
