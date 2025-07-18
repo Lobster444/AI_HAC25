@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload, Image, Loader2, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
-import { analyzeMatchImage } from '../lib/openai';
-import { saveMatchSummary } from '../lib/firestore';
+import { analyzeMatchImage, saveMatchSummary } from '../lib/firebaseFunctions';
 
 interface AdminUploadModalProps {
   isOpen: boolean;

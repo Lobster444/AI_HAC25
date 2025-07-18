@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Upload, Shield, Database, Eye, Trash2, Edit3, Key, Save, AlertTriangle, Loader2, CheckCircle } from 'lucide-react';
 import AdminUploadModal from './AdminUploadModal';
-import { getMatchSummary, deleteMatchSummary, saveOpenAIKey, getOpenAIKey, deleteOpenAIKey } from '../lib/firestore';
+import { getMatchSummary, deleteMatchSummary } from '../lib/firebaseFunctions';
+import { saveOpenAIKey, getOpenAIKey, deleteOpenAIKey } from '../lib/firestore';
 
 const AdminPage: React.FC = () => {
   const navigate = useNavigate();
