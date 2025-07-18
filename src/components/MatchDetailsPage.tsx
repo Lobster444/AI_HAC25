@@ -262,6 +262,13 @@ const MatchDetailsPage: React.FC = () => {
         </div>
       </div>
 
+      {/* AI Summary Modal */}
+      <AISummaryModal
+        isOpen={isAISummaryOpen}
+        onClose={() => setIsAISummaryOpen(false)}
+        customSummary={aiSummary}
+      />
+
     </div>
   );
 };
