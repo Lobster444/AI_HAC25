@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload, Image, Loader2, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
-import { analyzeMatchImage } from '../lib/firebaseFunctions';
+import { analyzeMatchImage } from '../lib/openai';
 import { saveMatchSummary } from '../lib/firestore';
 
 interface AdminUploadModalProps {
@@ -144,7 +144,9 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
       
       if (result.success) {
         // Create a combined summary mentioning multiple images were analyzed
-        const enhancedSummary = result.summary;
+        const enhancedSummary = uploadedImages.length > 1 
+          ? `Based on analysis of ${uploadedImages.length} match statistics images:\n\n${result.summary}`
+          : result.summary;
 
         // Save to Firestore
         await saveMatchSummary(matchId, enhancedSummary);

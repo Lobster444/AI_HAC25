@@ -112,7 +112,7 @@ export const getMatchSummary = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError(
       'internal',
       'Failed to get match summary',
-      { message: error instanceof Error ? error.message : String(error) }
+      error
     );
   }
 });

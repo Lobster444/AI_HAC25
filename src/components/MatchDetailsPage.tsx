@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, Play, BarChart3, Menu, Clock, CheckSquare, Gamepad2, Brain } from 'lucide-react';
 import AISummaryModal from './AISummaryModal';
-import { getMatchSummary } from '../lib/firebaseFunctions';
-import { getMatchSummary as getMatchSummaryDirect } from '../lib/firestore';
+import { getMatchSummary } from '../lib/firestore';
 
 const MatchDetailsPage: React.FC = () => {
   const [isAISummaryOpen, setIsAISummaryOpen] = useState(false);
@@ -15,7 +14,7 @@ const MatchDetailsPage: React.FC = () => {
   };
 
   const headToHeadResults = [
-    { date: "Jul '25", score: "0 - 1", teamAColor: "bg-yellow-500", teamBColor: "bg-teal-500" },
+    { date: "Jul '25", score: "0 - 1", teamAColor: "bg-red-600", teamBColor: "bg-teal-500" },
     { date: "Aug '22", score: "2 - 2", teamAColor: "bg-yellow-500", teamBColor: "bg-teal-500" },
     { date: "Aug '22", score: "1 - 2", teamAColor: "bg-yellow-500", teamBColor: "bg-teal-500" }
   ];
@@ -33,16 +32,7 @@ const MatchDetailsPage: React.FC = () => {
     setIsLoadingSummary(true);
     try {
       const matchId = 'team-a-vs-team-b-20250717';
-      let summary;
-      
-      try {
-        // Try Cloud Function first
-        summary = await getMatchSummary(matchId);
-      } catch (cloudFunctionError) {
-        console.warn('Cloud Function failed, falling back to direct Firestore access:', cloudFunctionError);
-        // Fallback to direct Firestore access
-        summary = await getMatchSummaryDirect(matchId);
-      }
+      const summary = await getMatchSummary(matchId);
       
       if (summary) {
         setAiSummary(summary.summary);
@@ -108,14 +98,14 @@ const MatchDetailsPage: React.FC = () => {
       {/* Latest Form */}
       <div className="px-4 py-4 bg-gray-800 border-b border-gray-700">
         <div className="text-center mb-6">
-          <h2 className="text-teal-400 font-semibold mb-4 text-sm">LATEST FORM</h2>
+          <h2 className="text-teal-400 font-semibold mb-3 text-sm">LATEST FORM</h2>
           <div className="flex justify-center items-center space-x-12">
-            {/* Team A Form */}
+            {/* Partizan Form */}
             <div className="flex space-x-1">
               {formData.teamA.map((result, index) => (
                 <div
                   key={index}
-                  className={`w-6 h-6 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
+                  className={`w-7 h-7 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
                 >
                   {result}
                 </div>
@@ -127,7 +117,7 @@ const MatchDetailsPage: React.FC = () => {
               {formData.teamB.map((result, index) => (
                 <div
                   key={index}
-                  className={`w-6 h-6 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
+                  className={`w-7 h-7 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
                 >
                   {result}
                 </div>
@@ -137,16 +127,16 @@ const MatchDetailsPage: React.FC = () => {
         </div>
 
         {/* Head to Head */}
-        <div className="mb-5">
-          <h3 className="text-center text-sm font-semibold mb-3">HEAD TO HEAD</h3>
-          <div className="space-y-2">
+        <div className="mb-6">
+          <h3 className="text-center text-base font-semibold mb-3">HEAD TO HEAD</h3>
+          <div className="space-y-3">
             {headToHeadResults.map((result, index) => (
               <div key={index} className="flex items-center">
-                <div className="w-12 text-xs text-gray-400 text-right">{result.date}</div>
+                <div className="w-16 text-xs text-gray-400 text-right">{result.date}</div>
                 <div className="flex-1 flex items-center">
-                  <div className={`h-2 ${result.teamAColor} rounded-l ml-2`} style={{ width: '30%' }}></div>
-                  <div className="bg-gray-700 px-2 py-1 text-xs font-semibold min-w-fit mx-1">{result.score}</div>
-                  <div className={`h-2 ${result.teamBColor} rounded-r mr-2`} style={{ width: '30%' }}></div>
+                  <div className={`h-2 ${result.teamAColor} rounded-l ml-3`} style={{ width: '35%' }}></div>
+                  <div className="bg-gray-700 px-3 py-1 text-xs font-semibold min-w-fit">{result.score}</div>
+                  <div className={`h-2 ${result.teamBColor} rounded-r`} style={{ width: '35%' }}></div>
                 </div>
               </div>
             ))}
@@ -154,13 +144,13 @@ const MatchDetailsPage: React.FC = () => {
         </div>
 
         {/* Stats Buttons */}
-        <div className="flex justify-center items-center space-x-6 mb-5">
+        <div className="flex justify-center items-center space-x-8 mb-6">
           <div className="text-center">
-            <BarChart3 className="w-5 h-5 mx-auto mb-1 text-gray-400" />
+            <BarChart3 className="w-6 h-6 mx-auto mb-1 text-gray-400" />
             <p className="text-xs text-gray-400">PLAYER STATS</p>
           </div>
           <div className="text-center">
-            <Menu className="w-5 h-5 mx-auto mb-1 text-gray-400" />
+            <Menu className="w-6 h-6 mx-auto mb-1 text-gray-400" />
             <p className="text-xs text-gray-400">STANDINGS</p>
           </div>
           <div className="text-center">
@@ -171,11 +161,11 @@ const MatchDetailsPage: React.FC = () => {
         </div>
 
         {/* AI Summary Button */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-2">
           <button
             onClick={handleAISummaryClick}
             disabled={isLoadingSummary}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-orange-400 disabled:to-orange-500 text-white px-6 py-2 rounded-xl font-semibold transition-all duration-200 flex items-center space-x-2 text-sm shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:hover:scale-100"
+            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-orange-400 disabled:to-orange-500 text-white px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 flex items-center space-x-2 text-sm shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:hover:scale-100"
           >
             {isLoadingSummary ? (
               <>
@@ -185,7 +175,7 @@ const MatchDetailsPage: React.FC = () => {
             ) : (
               <>
                 <Brain className="w-4 h-4" />
-                <span>SmartStats AI</span>
+                <span>AI SUMMARY</span>
               </>
             )}
           </button>
@@ -202,17 +192,16 @@ const MatchDetailsPage: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex space-x-1 mb-4 overflow-x-auto pb-1">
-          <button className="bg-gray-200 px-2 py-1 rounded-full text-xs whitespace-nowrap flex-shrink-0">All Markets</button>
-          <button className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs whitespace-nowrap flex-shrink-0">Main</button>
-          <button className="bg-gray-200 px-2 py-1 rounded-full text-xs whitespace-nowrap flex-shrink-0">Team Goals</button>
-          <button className="bg-gray-200 px-2 py-1 rounded-full text-xs whitespace-nowrap flex-shrink-0">Half</button>
-          <button className="bg-gray-200 px-2 py-1 rounded-full text-xs whitespace-nowrap flex-shrink-0">Goals</button>
+        <div className="flex space-x-2 mb-4 overflow-x-auto">
+          <button className="bg-gray-200 px-3 py-1 rounded-full text-xs whitespace-nowrap">All Markets</button>
+          <button className="bg-blue-500 text-white px-3 py-1 rounded-full text-xs whitespace-nowrap">Main</button>
+          <button className="bg-gray-200 px-3 py-1 rounded-full text-xs whitespace-nowrap">Team Goals</button>
+          <button className="bg-gray-200 px-3 py-1 rounded-full text-xs whitespace-nowrap">Half</button>
         </div>
 
-        <div className="bg-gray-50 p-3 rounded-lg">
+        <div className="bg-gray-50 p-4 rounded-lg">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-semibold text-sm">Match Betting</span>
+            <span className="font-semibold text-sm">2Up&Win - Early Payout</span>
             <div className="flex items-center space-x-2">
               <div className="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
                 <Clock className="w-3 h-3" />
@@ -221,18 +210,18 @@ const MatchDetailsPage: React.FC = () => {
             </div>
           </div>
           <p className="text-xs text-gray-600 mb-3">Win if your selection takes a 2 goal lead in 90 minutes</p>
-          <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="flex justify-between items-center">
             <div className="text-center">
               <p className="text-xs font-semibold">TEAM A</p>
-              <p className="text-sm font-bold">3.00</p>
+              <p className="text-base font-bold">3.10</p>
             </div>
             <div className="text-center">
               <p className="text-xs font-semibold">DRAW</p>
-              <p className="text-sm font-bold">3.40</p>
+              <p className="text-base font-bold">-----</p>
             </div>
             <div className="text-center">
               <p className="text-xs font-semibold">TEAM B</p>
-              <p className="text-sm font-bold">2.10</p>
+              <p className="text-base font-bold">2.20</p>
             </div>
           </div>
         </div>
@@ -263,12 +252,11 @@ const MatchDetailsPage: React.FC = () => {
       </div>
 
       {/* AI Summary Modal */}
-      <AISummaryModal
-        isOpen={isAISummaryOpen}
-        onClose={() => setIsAISummaryOpen(false)}
+      <AISummaryModal 
+        isOpen={isAISummaryOpen} 
+        onClose={() => setIsAISummaryOpen(false)} 
         customSummary={aiSummary}
       />
-
     </div>
   );
 };

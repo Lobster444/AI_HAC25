@@ -67,7 +67,7 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
         <div className="bg-orange-500 px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Brain className="w-5 h-5 text-white" />
-            <h2 className="text-lg font-bold text-white">SmartStats AI Analysis</h2>
+            <h2 className="text-lg font-bold text-white">AI Match Analysis</h2>
           </div>
           <button
             onClick={onClose}
@@ -111,11 +111,6 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                 </div>
                 <div className="prose prose-invert max-w-none">
                   {summary.split('\n').map((line, index) => {
-                    // Skip the "Based on analysis" line
-                    if (line.includes('Based on analysis of') && line.includes('match statistics images:')) {
-                      return null;
-                    }
-                    
                     if (line.startsWith('**') && line.endsWith('**')) {
                       return (
                         <h3 key={index} className="text-orange-400 font-semibold text-base mt-3 mb-2">
