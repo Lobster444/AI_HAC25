@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronLeft, Play, BarChart3, Menu, Clock, CheckSquare, Gamepad2, Brain } from 'lucide-react';
 import AISummaryModal from './AISummaryModal';
 import { getMatchSummary } from '../lib/firebaseFunctions';
+import { getMatchSummary as getMatchSummaryDirect } from '../lib/firestore';
 
 const MatchDetailsPage: React.FC = () => {
   const [isAISummaryOpen, setIsAISummaryOpen] = useState(false);
@@ -32,7 +33,16 @@ const MatchDetailsPage: React.FC = () => {
     setIsLoadingSummary(true);
     try {
       const matchId = 'team-a-vs-team-b-20250717';
-      const summary = await getMatchSummary(matchId);
+      let summary;
+      
+      try {
+        // Try Cloud Function first
+        summary = await getMatchSummary(matchId);
+      } catch (cloudFunctionError) {
+        console.warn('Cloud Function failed, falling back to direct Firestore access:', cloudFunctionError);
+        // Fallback to direct Firestore access
+        summary = await getMatchSummaryDirect(matchId);
+      }
       
       if (summary) {
         setAiSummary(summary.summary);
