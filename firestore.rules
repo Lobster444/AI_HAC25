@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Match summaries collection
+    match /matchSummaries/{matchId} {
+      // Allow read access to all users
+      allow read: if true;
+      
+      // Allow write access only to authenticated users (you can add more specific rules)
+      allow write: if request.auth != null;
+      
+      // Validate document structure
+      allow create, update: if validateMatchSummary();
+    }
+    
+    // API configuration collection (restricted access)
+    match /apiConfig/{configId} {
+      // Only allow read/write for now (you should add proper authentication)
+      allow read, write: if true;
+      
+      // Validate API config document structure
+      allow create, update: if validateApiConfig();
+    }
+    
+    // Function to validate match summary document structure
+    function validateMatchSummary() {
+      let requiredFields = ['id', 'matchId', 'summary', 'createdAt', 'updatedAt'];
+      let allowedFields = ['id', 'matchId', 'summary', 'imageUrl', 'createdAt', 'updatedAt'];
+      
+      return request.resource.data.keys().hasAll(requiredFields) &&
+             request.resource.data.keys().hasOnly(allowedFields) &&
+             request.resource.data.id is string &&
+             request.resource.data.matchId is string &&
+             request.resource.data.summary is string &&
+             request.resource.data.createdAt is timestamp &&
+             request.resource.data.updatedAt is timestamp;
+    }
+    
+    // Function to validate API config document structure
+    function validateApiConfig() {
+      let requiredFields = ['id', 'openaiKey', 'createdAt', 'updatedAt'];
+      let allowedFields = ['id', 'openaiKey', 'createdAt', 'updatedAt'];
+      
+      return request.resource.data.keys().hasAll(requiredFields) &&
+             request.resource.data.keys().hasOnly(allowedFields) &&
+             request.resource.data.id is string &&
+             request.resource.data.openaiKey is string &&
+             request.resource.data.createdAt is timestamp &&
+             request.resource.data.updatedAt is timestamp;
+    }
+  }
+}
