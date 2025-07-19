@@ -145,11 +145,11 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
       if (result.success) {
         // Create a combined summary mentioning multiple images were analyzed
         const enhancedSummary = uploadedImages.length > 1
-          ? `Based on analysis of ${uploadedImages.length} match statistics images:\n\n${result.summary}`
+          ? result.summary
           : result.summary;
 
         const enhancedBettingSuggestion = uploadedImages.length > 1
-          ? `Based on analysis of ${uploadedImages.length} match statistics images:\n\n${result.bettingSuggestion}`
+          ? result.bettingSuggestion
           : result.bettingSuggestion;
 
         // Save to Firestore
