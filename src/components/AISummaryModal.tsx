@@ -74,79 +74,80 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
-      <div className="bg-gray-800 rounded-lg w-full max-w-sm max-h-[85vh] overflow-hidden">
+      <div className="bg-gray-800 rounded-xl w-full max-w-sm max-h-[90vh] overflow-hidden shadow-2xl">
         {/* Header */}
-        <div className="bg-orange-500 px-4 py-3 flex items-center justify-between">
+        <div className="bg-orange-500 px-5 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Brain className="w-5 h-5 text-white" />
-            <h2 className="text-lg font-bold text-white">AI Match Analysis</h2>
+            <Brain className="w-6 h-6 text-white" />
+            <h2 className="text-xl font-bold text-white">AI Match Analysis</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-white hover:text-gray-200 transition-colors"
+            className="text-white hover:text-gray-200 transition-colors p-1"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-4 text-white max-h-[calc(85vh-120px)] overflow-y-auto">
+        <div className="p-5 text-white max-h-[calc(90vh-140px)] overflow-y-auto">
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-8">
-              <Loader2 className="w-10 h-10 text-orange-500 animate-spin mb-3" />
-              <p className="text-base font-semibold mb-2">Analyzing Match Statistics...</p>
-              <p className="text-gray-400 text-center text-sm">
+            <div className="flex flex-col items-center justify-center py-12">
+              <Loader2 className="w-12 h-12 text-orange-500 animate-spin mb-4" />
+              <p className="text-lg font-semibold mb-3">Analyzing Match Statistics...</p>
+              <p className="text-gray-400 text-center text-sm leading-relaxed max-w-xs">
                 Our AI is processing team form, head-to-head records, and current match data to generate insights.
               </p>
             </div>
           ) : error ? (
-            <div className="text-center py-8">
-              <p className="text-red-400 text-base font-semibold mb-2">Analysis Error</p>
-              <p className="text-gray-400 text-sm">{error}</p>
+            <div className="text-center py-12">
+              <p className="text-red-400 text-lg font-semibold mb-3">Analysis Error</p>
+              <p className="text-gray-400 text-sm leading-relaxed">{error}</p>
               <button
                 onClick={() => {
                   setError('');
                   setLoading(true);
                   // Retry logic would go here
                 }}
-                className="mt-3 bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded transition-colors text-sm"
+                className="mt-4 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
               >
                 Retry Analysis
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
-              <div className="bg-gray-700 rounded-lg p-3">
-                <div className="flex items-center space-x-2 mb-3">
-                  <Brain className="w-4 h-4 text-orange-500" />
-                  <span className="text-orange-500 font-semibold text-sm">AI Generated Summary</span>
+            <div className="space-y-5">
+              {/* AI Generated Summary */}
+              <div className="bg-gray-700 rounded-xl p-4">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Brain className="w-5 h-5 text-orange-500" />
+                  <span className="text-orange-400 font-semibold text-base">AI Generated Summary</span>
                 </div>
-                <div className="prose prose-invert max-w-none">
+                <div className="text-gray-200 leading-relaxed text-sm">
                   {matchSummary?.summary.split('\n').map((line, index) => {
                     if (line.startsWith('**') && line.endsWith('**')) {
                       return (
-                        <h3 key={index} className="text-orange-400 font-semibold text-base mt-3 mb-2">
+                        <h3 key={index} className="text-orange-400 font-semibold text-base mt-4 mb-2 first:mt-0">
                           {line.replace(/\*\*/g, '')}
                         </h3>
                       );
                     }
                     if (line.startsWith('- ')) {
                       return (
-                        <li key={index} className="text-gray-300 ml-3 text-sm">
+                        <li key={index} className="text-gray-200 ml-4 text-sm mb-1">
                           {line.substring(2)}
                         </li>
                       );
                     }
                     if (line.match(/^\d+\./)) {
                       return (
-                        <li key={index} className="text-gray-300 ml-3 text-sm">
+                        <li key={index} className="text-gray-200 ml-4 text-sm mb-1">
                           {line}
                         </li>
                       );
                     }
                     if (line.trim()) {
                       return (
-                        <p key={index} className="text-gray-300 mb-2 text-sm">
+                        <p key={index} className="text-gray-200 mb-3 text-sm leading-relaxed">
                           {line}
                         </p>
                       );
@@ -158,30 +159,30 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
 
               {/* Betting Suggestion Section */}
               {matchSummary?.bettingSuggestion && (
-                <div className="bg-green-600/20 border border-green-500 rounded-lg p-3">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <Target className="w-4 h-4 text-green-400" />
-                    <span className="text-green-400 font-semibold text-sm">Total Goals Analysis & Betting Suggestion</span>
+                <div className="bg-green-600/20 border border-green-500/50 rounded-xl p-4">
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Target className="w-5 h-5 text-green-400" />
+                    <span className="text-green-400 font-semibold text-base">Total Goals Analysis & Betting Suggestion</span>
                   </div>
-                  <p className="text-green-100 text-sm leading-relaxed mb-3">
+                  <p className="text-green-100 text-sm leading-relaxed mb-4">
                     {matchSummary.bettingSuggestion}
                   </p>
                   
                   {/* Odds Display */}
                   {matchSummary.overUnderOdds && (
-                    <div className="bg-green-700/30 rounded-lg p-3">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <TrendingUp className="w-4 h-4 text-green-300" />
-                        <span className="text-green-300 font-medium text-sm">Generated Odds</span>
+                    <div className="bg-green-700/30 rounded-xl p-4">
+                      <div className="flex items-center space-x-2 mb-3">
+                        <TrendingUp className="w-5 h-5 text-green-300" />
+                        <span className="text-green-300 font-semibold text-base">Generated Odds</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="bg-blue-600/30 rounded-lg p-2 text-center">
-                          <p className="text-blue-200 text-xs font-medium">Over 2.5 Goals</p>
-                          <p className="text-blue-100 text-lg font-bold">{matchSummary.overUnderOdds.over}</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-blue-600/40 rounded-lg p-3 text-center">
+                          <p className="text-blue-200 text-xs font-semibold mb-1">Over 2.5 Goals</p>
+                          <p className="text-blue-100 text-xl font-bold">{matchSummary.overUnderOdds.over}</p>
                         </div>
-                        <div className="bg-red-600/30 rounded-lg p-2 text-center">
-                          <p className="text-red-200 text-xs font-medium">Under 2.5 Goals</p>
-                          <p className="text-red-100 text-lg font-bold">{matchSummary.overUnderOdds.under}</p>
+                        <div className="bg-red-600/40 rounded-lg p-3 text-center">
+                          <p className="text-red-200 text-xs font-semibold mb-1">Under 2.5 Goals</p>
+                          <p className="text-red-100 text-xl font-bold">{matchSummary.overUnderOdds.under}</p>
                         </div>
                       </div>
                     </div>
@@ -189,8 +190,9 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                 </div>
               )}
 
-              <div className="bg-blue-600/20 border border-blue-500 rounded-lg p-3">
-                <p className="text-blue-300 text-xs">
+              {/* Disclaimer */}
+              <div className="bg-blue-600/20 border border-blue-500/50 rounded-xl p-4">
+                <p className="text-blue-300 text-xs leading-relaxed">
                   <strong>Disclaimer:</strong> This analysis and betting suggestions are generated by AI and should be used as supplementary information only. 
                   Odds are randomly generated for demonstration purposes. Always conduct your own research and gamble responsibly.
                 </p>
@@ -200,10 +202,10 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-700 px-4 py-3 flex justify-end">
+        <div className="bg-gray-700 px-5 py-4 flex justify-end">
           <button
             onClick={onClose}
-            className="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded transition-colors text-sm"
+            className="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2.5 rounded-lg transition-colors text-sm font-medium"
           >
             Close
           </button>
