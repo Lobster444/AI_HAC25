@@ -16,10 +16,19 @@ interface MatchSummary {
   id: string;
   matchId: string;
   summary: string;
+  bettingSuggestion: string;
+  overUnderOdds: { over: string; under: string; } | null;
   imageUrl?: string;
   createdAt: admin.firestore.Timestamp;
   updatedAt: admin.firestore.Timestamp;
 }
+
+// Function to generate random odds between 1.50 and 3.00
+const generateRandomOdds = (): { over: string; under: string; } => {
+  const overOdds = (Math.random() * (3.00 - 1.50) + 1.50).toFixed(2);
+  const underOdds = (Math.random() * (3.00 - 1.50) + 1.50).toFixed(2);
+  return { over: overOdds, under: underOdds };
+};
 
 // Cloud Function to analyze match image and store summary
 export const analyzeMatchImage = functions.https.onCall(async (data, context) => {
@@ -41,7 +50,7 @@ export const analyzeMatchImage = functions.https.onCall(async (data, context) =>
           content: [
             {
               type: "text",
-              text: "Analyze this sports match statistics image and provide a concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages."
+              text: "Analyze this sports match statistics image and provide two separate analyses:\n\n1. MATCH SUMMARY: A concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages.\n\n2. GOALS ANALYSIS: Analyze the goal-scoring patterns from previous games shown in the image. Look at how many goals each team typically scores and concedes. Based on this data, provide a specific recommendation for Total Goals Over/Under betting (e.g., 'Over 2.5 goals' or 'Under 1.5 goals') with a brief explanation of why.\n\nFormat your response as:\nMATCH SUMMARY: [your summary here]\nGOALS ANALYSIS: [your goals analysis and betting recommendation here]"
             },
             {
               type: "image_url",
@@ -55,7 +64,20 @@ export const analyzeMatchImage = functions.https.onCall(async (data, context) =>
       max_tokens: 300
     });
 
-    const summary = response.choices[0]?.message?.content || "Unable to analyze the image.";
+    const fullResponse = response.choices[0]?.message?.content || "Unable to analyze the image.";
+    
+    // Parse the response to separate summary and betting suggestion
+    let summary = fullResponse;
+    let bettingSuggestion = "Unable to provide betting analysis.";
+    
+    if (fullResponse.includes("MATCH SUMMARY:") && fullResponse.includes("GOALS ANALYSIS:")) {
+      const parts = fullResponse.split("GOALS ANALYSIS:");
+      summary = parts[0].replace("MATCH SUMMARY:", "").trim();
+      bettingSuggestion = parts[1].trim();
+    }
+    
+    // Generate random odds
+    const overUnderOdds = generateRandomOdds();
 
     // Store in Firestore
     const now = admin.firestore.Timestamp.now();
@@ -63,6 +85,8 @@ export const analyzeMatchImage = functions.https.onCall(async (data, context) =>
       id: data.matchId,
       matchId: data.matchId,
       summary,
+      bettingSuggestion,
+      overUnderOdds,
       imageUrl: data.imageUrl,
       createdAt: now,
       updatedAt: now
@@ -73,6 +97,8 @@ export const analyzeMatchImage = functions.https.onCall(async (data, context) =>
     return {
       success: true,
       summary,
+      bettingSuggestion,
+      overUnderOdds,
       matchId: data.matchId
     };
 
@@ -127,11 +153,24 @@ export const updateMatchSummary = functions.https.onCall(async (data, context) =
       );
     }
 
-    await db.collection('matchSummaries').doc(data.matchId).update({
+    const updateData: any = {
       summary: data.summary,
-      imageUrl: data.imageUrl,
       updatedAt: admin.firestore.Timestamp.now()
-    });
+    };
+    
+    if (data.bettingSuggestion !== undefined) {
+      updateData.bettingSuggestion = data.bettingSuggestion;
+    }
+    
+    if (data.overUnderOdds !== undefined) {
+      updateData.overUnderOdds = data.overUnderOdds;
+    }
+    
+    if (data.imageUrl !== undefined) {
+      updateData.imageUrl = data.imageUrl;
+    }
+
+    await db.collection('matchSummaries').doc(data.matchId).update(updateData);
 
     return { success: true };
 

@@ -8,6 +8,8 @@ export interface MatchSummary {
   id: string;
   matchId: string;
   summary: string;
+  bettingSuggestion: string;
+  overUnderOdds: { over: string; under: string; } | null;
   imageUrl?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -26,7 +28,7 @@ export const updateMatchSummaryFunction = httpsCallable(functions, 'updateMatchS
 export const deleteMatchSummaryFunction = httpsCallable(functions, 'deleteMatchSummary');
 
 // Wrapper functions for easier use
-export const analyzeMatchImage = async (imageBase64: string, matchId: string, imageUrl?: string): Promise<string> => {
+export const analyzeMatchImage = async (imageBase64: string, matchId: string, imageUrl?: string): Promise<{ summary: string; bettingSuggestion: string; overUnderOdds: { over: string; under: string; } }> => {
   try {
     const result = await analyzeMatchImageFunction({
       imageBase64,
@@ -34,10 +36,16 @@ export const analyzeMatchImage = async (imageBase64: string, matchId: string, im
       imageUrl
     });
     
-    const data = result.data as { success: boolean; summary: string; matchId: string };
+    const data = result.data as { 
+      success: boolean; 
+      summary: string; 
+      bettingSuggestion: string;
+      overUnderOdds: { over: string; under: string; };
+      matchId: string;
+    };
     
     if (data.success) {
-      return data.summary;
+      return { summary: data.summary, bettingSuggestion: data.bettingSuggestion, overUnderOdds: data.overUnderOdds };
     } else {
       throw new Error('Failed to analyze image');
     }
@@ -67,11 +75,13 @@ export const getMatchSummary = async (matchId: string): Promise<MatchSummary | n
   }
 };
 
-export const updateMatchSummary = async (matchId: string, summary: string, imageUrl?: string): Promise<void> => {
+export const updateMatchSummary = async (matchId: string, summary: string, bettingSuggestion?: string, overUnderOdds?: { over: string; under: string; }, imageUrl?: string): Promise<void> => {
   try {
     const result = await updateMatchSummaryFunction({
       matchId,
       summary,
+      bettingSuggestion,
+      overUnderOdds,
       imageUrl
     });
     

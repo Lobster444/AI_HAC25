@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Upload, Shield, Database, Eye, Trash2, Edit3, Key, Save, AlertTriangle, Loader2, CheckCircle } from 'lucide-react';
 import AdminUploadModal from './AdminUploadModal';
-import { getMatchSummary, deleteMatchSummary, saveOpenAIKey, getOpenAIKey, deleteOpenAIKey } from '../lib/firestore';
+import { getMatchSummary, deleteMatchSummary, saveOpenAIKey, getOpenAIKey, deleteOpenAIKey, MatchSummary } from '../lib/firestore';
 
 const AdminPage: React.FC = () => {
   const navigate = useNavigate();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [currentSummary, setCurrentSummary] = useState<string>('');
+  const [currentSummary, setCurrentSummary] = useState<MatchSummary | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -49,7 +49,7 @@ const AdminPage: React.FC = () => {
           lastUpdated: summary.updatedAt,
           totalSummaries: 1
         });
-        setCurrentSummary(summary.summary);
+        setCurrentSummary(summary);
       }
     } catch (error) {
       console.error('Error loading summary stats:', error);
@@ -66,7 +66,7 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const handleSummaryUpdated = (newSummary: string) => {
+  const handleSummaryUpdated = (newSummary: MatchSummary) => {
     setCurrentSummary(newSummary);
     loadSummaryStats();
   };
@@ -76,7 +76,7 @@ const AdminPage: React.FC = () => {
       try {
         const matchId = 'team-a-vs-team-b-20250717';
         await deleteMatchSummary(matchId);
-        setCurrentSummary('');
+        setCurrentSummary(null);
         setSummaryStats({
           lastUpdated: null,
           totalSummaries: 0
@@ -334,7 +334,27 @@ const AdminPage: React.FC = () => {
             </h3>
             
             <div className="bg-gray-700 rounded-lg p-3 mb-3">
-              <p className="text-gray-300 text-sm leading-relaxed">{currentSummary}</p>
+              <div className="space-y-2">
+                <div>
+                  <p className="text-orange-300 text-xs font-medium mb-1">Match Summary:</p>
+                  <p className="text-gray-300 text-sm leading-relaxed">{currentSummary.summary}</p>
+                </div>
+                {currentSummary.bettingSuggestion && (
+                  <div>
+                    <p className="text-green-300 text-xs font-medium mb-1">Betting Suggestion:</p>
+                    <p className="text-gray-300 text-sm leading-relaxed">{currentSummary.bettingSuggestion}</p>
+                  </div>
+                )}
+                {currentSummary.overUnderOdds && (
+                  <div>
+                    <p className="text-blue-300 text-xs font-medium mb-1">Generated Odds:</p>
+                    <div className="flex space-x-4 text-sm">
+                      <span className="text-green-400">Over: {currentSummary.overUnderOdds.over}</span>
+                      <span className="text-blue-400">Under: {currentSummary.overUnderOdds.under}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
             <button

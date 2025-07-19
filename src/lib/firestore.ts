@@ -5,6 +5,8 @@ export interface MatchSummary {
   id: string;
   matchId: string;
   summary: string;
+  bettingSuggestion: string;
+  overUnderOdds: { over: string; under: string; } | null;
   imageUrl?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -12,7 +14,7 @@ export interface MatchSummary {
 
 const COLLECTION_NAME = 'matchSummaries';
 
-export const saveMatchSummary = async (matchId: string, summary: string, imageUrl?: string): Promise<void> => {
+export const saveMatchSummary = async (matchId: string, summary: string, bettingSuggestion?: string, overUnderOdds?: { over: string; under: string; } | null, imageUrl?: string): Promise<void> => {
   try {
     const docRef = doc(db, COLLECTION_NAME, matchId);
     const now = new Date();
@@ -21,6 +23,8 @@ export const saveMatchSummary = async (matchId: string, summary: string, imageUr
       id: matchId,
       matchId,
       summary,
+      bettingSuggestion: bettingSuggestion || '',
+      overUnderOdds: overUnderOdds || null,
       createdAt: now,
       updatedAt: now
     };
@@ -58,7 +62,7 @@ export const getMatchSummary = async (matchId: string): Promise<MatchSummary | n
   }
 };
 
-export const updateMatchSummary = async (matchId: string, summary: string, imageUrl?: string): Promise<void> => {
+export const updateMatchSummary = async (matchId: string, summary: string, bettingSuggestion?: string, overUnderOdds?: { over: string; under: string; } | null, imageUrl?: string): Promise<void> => {
   try {
     const docRef = doc(db, COLLECTION_NAME, matchId);
     
@@ -66,6 +70,16 @@ export const updateMatchSummary = async (matchId: string, summary: string, image
       summary,
       updatedAt: new Date()
     };
+    
+    // Only add bettingSuggestion if it's not undefined
+    if (bettingSuggestion !== undefined) {
+      updateData.bettingSuggestion = bettingSuggestion;
+    }
+    
+    // Only add overUnderOdds if it's not undefined
+    if (overUnderOdds !== undefined) {
+      updateData.overUnderOdds = overUnderOdds;
+    }
     
     // Only add imageUrl if it's not undefined
     if (imageUrl !== undefined) {

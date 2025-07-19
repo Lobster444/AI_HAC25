@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload, Image, Loader2, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 import { analyzeMatchImage } from '../lib/openai';
-import { saveMatchSummary } from '../lib/firestore';
+import { saveMatchSummary, MatchSummary } from '../lib/firestore';
 
 interface AdminUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSummaryUpdated: (summary: string) => void;
+  onSummaryUpdated: (matchSummary: MatchSummary) => void;
 }
 
 interface UploadedImage {
@@ -19,7 +19,7 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
   const [dragActive, setDragActive] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<string>('');
+  const [analysisResult, setAnalysisResult] = useState<MatchSummary | null>(null);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -103,14 +103,14 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
 
     setError('');
     setSuccess(false);
-    setAnalysisResult('');
+    setAnalysisResult(null);
   };
 
   const removeImage = (id: string) => {
     setUploadedImages(prev => prev.filter(img => img.id !== id));
     setError('');
     setSuccess(false);
-    setAnalysisResult('');
+    setAnalysisResult(null);
   };
 
   const convertToBase64 = (file: File): Promise<string> => {
@@ -144,16 +144,30 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
       
       if (result.success) {
         // Create a combined summary mentioning multiple images were analyzed
-        const enhancedSummary = uploadedImages.length > 1 
+        const enhancedSummary = uploadedImages.length > 1
           ? `Based on analysis of ${uploadedImages.length} match statistics images:\n\n${result.summary}`
           : result.summary;
 
+        const enhancedBettingSuggestion = uploadedImages.length > 1
+          ? `Based on analysis of ${uploadedImages.length} match statistics images:\n\n${result.bettingSuggestion}`
+          : result.bettingSuggestion;
+
         // Save to Firestore
-        await saveMatchSummary(matchId, enhancedSummary);
+        await saveMatchSummary(matchId, enhancedSummary, enhancedBettingSuggestion, result.overUnderOdds);
         
-        setAnalysisResult(enhancedSummary);
+        const matchSummary: MatchSummary = {
+          id: matchId,
+          matchId,
+          summary: enhancedSummary,
+          bettingSuggestion: enhancedBettingSuggestion,
+          overUnderOdds: result.overUnderOdds,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        
+        setAnalysisResult(matchSummary);
         setSuccess(true);
-        onSummaryUpdated(enhancedSummary);
+        onSummaryUpdated(matchSummary);
       } else {
         setError(result.error || 'Failed to analyze images');
       }
@@ -166,7 +180,7 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
 
   const resetModal = () => {
     setUploadedImages([]);
-    setAnalysisResult('');
+    setAnalysisResult(null);
     setError('');
     setSuccess(false);
     setIsAnalyzing(false);
@@ -332,7 +346,25 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
           {analysisResult && (
             <div className="mt-4 bg-gray-700 rounded-lg p-3">
               <h3 className="text-orange-400 font-semibold mb-2 text-sm">AI Analysis Result:</h3>
-              <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{analysisResult}</p>
+              <div className="space-y-3">
+                <div>
+                  <h4 className="text-orange-300 font-medium mb-1 text-xs">Match Summary:</h4>
+                  <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{analysisResult.summary}</p>
+                </div>
+                <div>
+                  <h4 className="text-orange-300 font-medium mb-1 text-xs">Betting Suggestion:</h4>
+                  <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">{analysisResult.bettingSuggestion}</p>
+                </div>
+                {analysisResult.overUnderOdds && (
+                  <div>
+                    <h4 className="text-orange-300 font-medium mb-1 text-xs">Generated Odds:</h4>
+                    <div className="flex space-x-4 text-sm">
+                      <span className="text-green-400">Over: {analysisResult.overUnderOdds.over}</span>
+                      <span className="text-blue-400">Under: {analysisResult.overUnderOdds.under}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

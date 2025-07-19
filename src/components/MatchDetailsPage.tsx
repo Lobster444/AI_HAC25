@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { ChevronLeft, Play, BarChart3, Menu, Clock, CheckSquare, Gamepad2, Brain } from 'lucide-react';
 import AISummaryModal from './AISummaryModal';
-import { getMatchSummary } from '../lib/firestore';
+import { getMatchSummary, MatchSummary } from '../lib/firestore';
 
 const MatchDetailsPage: React.FC = () => {
   const [isAISummaryOpen, setIsAISummaryOpen] = useState(false);
-  const [aiSummary, setAiSummary] = useState<string>('');
+  const [aiSummary, setAiSummary] = useState<MatchSummary | null>(null);
   const [isLoadingSummary, setIsLoadingSummary] = useState(false);
 
   const formData = {
@@ -35,13 +35,13 @@ const MatchDetailsPage: React.FC = () => {
       const summary = await getMatchSummary(matchId);
       
       if (summary) {
-        setAiSummary(summary.summary);
+        setAiSummary(summary);
       } else {
-        setAiSummary(''); // Will show default mock summary
+        setAiSummary(null); // Will show default mock summary
       }
     } catch (error) {
       console.error('Error loading AI summary:', error);
-      setAiSummary(''); // Will show default mock summary
+      setAiSummary(null); // Will show default mock summary
     } finally {
       setIsLoadingSummary(false);
       setIsAISummaryOpen(true);

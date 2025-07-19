@@ -1,33 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { X, Brain, Loader2 } from 'lucide-react';
+import { X, Brain, Loader2, TrendingUp, Target } from 'lucide-react';
+import { MatchSummary } from '../lib/firestore';
 
 interface AISummaryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  customSummary?: string;
+  customSummary?: MatchSummary | null;
 }
 
 const AISummaryModal: React.FC<AISummaryModalProps> = ({ isOpen, onClose, customSummary }) => {
   const [loading, setLoading] = useState(true);
-  const [summary, setSummary] = useState('');
+  const [matchSummary, setMatchSummary] = useState<MatchSummary | null>(null);
   const [error, setError] = useState('');
 
   // Simulate AI analysis with loading state
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
-      setSummary('');
+      setMatchSummary(null);
       setError('');
       
       // Simulate API call with delay
       if (customSummary) {
         // Use the uploaded and analyzed summary
-        setSummary(customSummary);
+        setMatchSummary(customSummary);
         setLoading(false);
       } else {
         // Use mock data if no custom summary available
         const timer = setTimeout(() => {
-          setSummary(`Based on the match statistics and recent form analysis:
+          const mockSummary: MatchSummary = {
+            id: 'mock-summary',
+            matchId: 'team-a-vs-team-b-20250717',
+            summary: `Based on the match statistics and recent form analysis:
 
 **Match Overview:**
 Team A faces Team B in the UEFA Europa League with Team B currently leading 1-0. The match is scheduled for 20:00 on 17/07/2025.
@@ -49,7 +53,13 @@ Recent encounters favor Team B:
 4. Historical head-to-head results support Team B's current advantage
 
 **Betting Recommendation:**
-Current odds favor Team B at 2.20, which appears reasonable given their form and current lead. Team A at 3.10 offers higher returns but carries significantly more risk given their recent performances.`);
+Current odds favor Team B at 2.20, which appears reasonable given their form and current lead. Team A at 3.10 offers higher returns but carries significantly more risk given their recent performances.`,
+            bettingSuggestion: `Based on goal-scoring patterns from recent matches, both teams have shown moderate attacking output. Team A averages 1.2 goals per game in their last 5 matches, while Team B averages 1.8 goals. Defensively, both teams have been relatively solid. Given the current match situation and historical data, I recommend **Under 2.5 goals** for this match. The teams' recent form suggests a tactical, low-scoring affair.`,
+            overUnderOdds: { over: '2.15', under: '1.85' },
+            createdAt: new Date(),
+            updatedAt: new Date()
+          };
+          setMatchSummary(mockSummary);
           setLoading(false);
         }, 2000);
 
@@ -110,7 +120,7 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                   <span className="text-orange-500 font-semibold text-sm">AI Generated Summary</span>
                 </div>
                 <div className="prose prose-invert max-w-none">
-                  {summary.split('\n').map((line, index) => {
+                  {matchSummary?.summary.split('\n').map((line, index) => {
                     if (line.startsWith('**') && line.endsWith('**')) {
                       return (
                         <h3 key={index} className="text-orange-400 font-semibold text-base mt-3 mb-2">
@@ -144,10 +154,43 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                 </div>
               </div>
 
+              {/* Betting Suggestion Section */}
+              {matchSummary?.bettingSuggestion && (
+                <div className="bg-green-600/20 border border-green-500 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <Target className="w-4 h-4 text-green-400" />
+                    <span className="text-green-400 font-semibold text-sm">Total Goals Analysis & Betting Suggestion</span>
+                  </div>
+                  <p className="text-green-100 text-sm leading-relaxed mb-3">
+                    {matchSummary.bettingSuggestion}
+                  </p>
+                  
+                  {/* Odds Display */}
+                  {matchSummary.overUnderOdds && (
+                    <div className="bg-green-700/30 rounded-lg p-3">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <TrendingUp className="w-4 h-4 text-green-300" />
+                        <span className="text-green-300 font-medium text-sm">Generated Odds</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-blue-600/30 rounded-lg p-2 text-center">
+                          <p className="text-blue-200 text-xs font-medium">Over 2.5 Goals</p>
+                          <p className="text-blue-100 text-lg font-bold">{matchSummary.overUnderOdds.over}</p>
+                        </div>
+                        <div className="bg-red-600/30 rounded-lg p-2 text-center">
+                          <p className="text-red-200 text-xs font-medium">Under 2.5 Goals</p>
+                          <p className="text-red-100 text-lg font-bold">{matchSummary.overUnderOdds.under}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="bg-blue-600/20 border border-blue-500 rounded-lg p-3">
                 <p className="text-blue-300 text-xs">
-                  <strong>Disclaimer:</strong> This analysis is generated by AI and should be used as supplementary information only. 
-                  Always conduct your own research and gamble responsibly.
+                  <strong>Disclaimer:</strong> This analysis and betting suggestions are generated by AI and should be used as supplementary information only. 
+                  Odds are randomly generated for demonstration purposes. Always conduct your own research and gamble responsibly.
                 </p>
               </div>
             </div>
