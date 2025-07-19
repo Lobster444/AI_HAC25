@@ -217,7 +217,7 @@ const MatchDetailsPage: React.FC = () => {
             </div>
             <div className="text-center">
               <p className="text-xs font-semibold">DRAW</p>
-              <p className="text-base font-bold">-----</p>
+              <p className="text-base font-bold">3.00</p>
             </div>
             <div className="text-center">
               <p className="text-xs font-semibold">TEAM B</p>
