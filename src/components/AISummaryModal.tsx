@@ -55,6 +55,7 @@ Recent encounters favor Team B:
 **Betting Recommendation:**
 Current odds favor Team B at 2.20, which appears reasonable given their form and current lead. Team A at 3.10 offers higher returns but carries significantly more risk given their recent performances.`,
             bettingSuggestion: `Based on goal-scoring patterns from recent matches, both teams have shown moderate attacking output. Team A averages 1.2 goals per game in their last 5 matches, while Team B averages 1.8 goals. Defensively, both teams have been relatively solid. Given the current match situation and historical data, I recommend **Under 2.5 goals** for this match. The teams' recent form suggests a tactical, low-scoring affair.`,
+            bettingSuggestion: `Based on recent goal-scoring patterns, I recommend **Under 2.5 goals** as both teams average low scoring games.`,
             overUnderOdds: { over: '2.15', under: '1.85' },
             createdAt: new Date(),
             updatedAt: new Date()

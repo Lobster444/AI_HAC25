@@ -44,7 +44,7 @@ export const analyzeMatchImage = async (imageBase64: string): Promise<OpenAIAnal
             content: [
               {
                 type: 'text',
-                text: 'Analyze this sports match statistics image and provide two separate analyses:\n\n1. MATCH SUMMARY: A concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages.\n\n2. GOALS ANALYSIS: Analyze the goal-scoring patterns from previous games shown in the image. Look at how many goals each team typically scores and concedes. Based on this data, provide a specific recommendation for Total Goals Over/Under betting (e.g., \'Over 2.5 goals\' or \'Under 1.5 goals\') with a brief explanation of why.\n\nFormat your response as:\nMATCH SUMMARY: [your summary here]\nGOALS ANALYSIS: [your goals analysis and betting recommendation here]'
+                text: 'Analyze this sports match statistics image and provide two separate analyses:\n\n1. MATCH SUMMARY: A concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages.\n\n2. GOALS ANALYSIS: Analyze the goal-scoring patterns from previous games shown in the image. Based on this data, provide a specific recommendation for Total Goals Over/Under betting (e.g., \'Over 2.5 goals\' or \'Under 1.5 goals\') in ONE sentence only.\n\nFormat your response as:\nMATCH SUMMARY: [your summary here]\nGOALS ANALYSIS: [your goals analysis and betting recommendation in one sentence]'
               },
               {
                 type: 'image_url',
