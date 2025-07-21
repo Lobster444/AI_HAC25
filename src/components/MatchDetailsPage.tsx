@@ -96,13 +96,13 @@ const MatchDetailsPage: React.FC = () => {
       <div className="px-4 py-4 bg-gray-800 border-b border-gray-700">
         <div className="text-center mb-6">
           <h2 className="text-teal-400 font-semibold mb-3 text-sm">LATEST FORM</h2>
-          <div className="flex justify-center items-center space-x-12">
+          <div className="flex justify-center items-center space-x-8">
             {/* Partizan Form */}
-            <div className="flex space-x-1">
+            <div className="flex space-x-0.5">
               {formData.teamA.map((result, index) => (
                 <div
                   key={index}
-                  className={`w-7 h-7 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
+                  className={`w-6 h-6 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
                 >
                   {result}
                 </div>
@@ -110,11 +110,11 @@ const MatchDetailsPage: React.FC = () => {
             </div>
             
             {/* Team B Form */}
-            <div className="flex space-x-1">
+            <div className="flex space-x-0.5">
               {formData.teamB.map((result, index) => (
                 <div
                   key={index}
-                  className={`w-7 h-7 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
+                  className={`w-6 h-6 ${getFormBadgeClass(result)} rounded flex items-center justify-center text-white font-bold text-xs`}
                 >
                   {result}
                 </div>
