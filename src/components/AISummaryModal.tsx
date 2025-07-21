@@ -173,7 +173,7 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                     <div className="bg-green-700/30 rounded-xl p-4">
                       <div className="flex items-center space-x-2 mb-3">
                         <TrendingUp className="w-5 h-5 text-green-300" />
-                        <span className="text-green-300 font-semibold text-base">Generated Odds</span>
+                        <span className="text-green-300 font-semibold text-base">Recommended bets</span>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-blue-600/40 rounded-lg p-3 text-center">
