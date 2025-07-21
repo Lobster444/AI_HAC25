@@ -44,7 +44,7 @@ export const analyzeMatchImage = async (imageBase64: string): Promise<OpenAIAnal
             content: [
               {
                 type: 'text',
-                text: 'Analyze this sports match statistics image and provide two separate analyses:\n\n1. MATCH SUMMARY: A concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages.\n\n2. GOALS ANALYSIS: Provide ONLY a betting recommendation for Over/Under Total Goals (e.g., \'Over 2.5 goals\' or \'Under 1.5 goals\') in maximum 60 characters.\n\nFormat your response as:\nMATCH SUMMARY: [your summary here]\nGOALS ANALYSIS: [betting recommendation only, max 60 chars]'
+                text: 'Analyze this sports match statistics image and provide two separate analyses:\n\n1. MATCH SUMMARY: A concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages.\n\n2. GOALS ANALYSIS: Provide ONLY a betting recommendation for Over/Under Total Goals (e.g., \'Over 2.5 goals\' or \'Under 1.5 goals\') in maximum 60 characters.\n\nFormat your response as:\nMATCH SUMMARY: [your summary here]\nGOALS ANALYSIS: [betting recommendation, max 60 chars]'
               },
               {
                 type: 'image_url',
