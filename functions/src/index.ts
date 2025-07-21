@@ -43,7 +43,7 @@ export const analyzeMatchImage = functions.https.onCall(async (data, context) =>
 
     // Call OpenAI Vision API
     const response = await openai.chat.completions.create({
-      model: "gpt-4.1",
+      model: "gpt-4.1-mini",
       messages: [
         {
           role: "user",
