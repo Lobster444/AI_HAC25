@@ -50,7 +50,7 @@ export const analyzeMatchImage = functions.https.onCall(async (data, context) =>
           content: [
             {
               type: "text",
-              text: "Analyze this sports match statistics image and provide two separate analyses:\n\n1. MATCH SUMMARY: A concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages.\n\n2. GOALS ANALYSIS: Provide ONLY a betting recommendation (e.g., 'Over 2.5 goals' or 'Under 1.5 goals') in maximum 60 characters.\n\nFormat your response as:\nMATCH SUMMARY: [your summary here]\nGOALS ANALYSIS: [betting recommendation only, max 60 chars]"
+              text: "Analyze this sports match statistics image and provide two separate analyses:\n\n1. MATCH SUMMARY: A concise 2-3 sentence summary focusing on key insights that would help someone understand the match dynamics and likely outcome. Focus on team form, head-to-head records, and any statistical advantages.\n\n2. GOALS ANALYSIS: Provide a betting recommendation (e.g., 'Over 2.5 goals' or 'Under 1.5 goals') followed by a one-sentence reasoning explanation. If recommending an Under bet, you MUST include \"Reasoning: [one sentence explaining why the total will be under]\" that focuses on the most compelling factor (defensive stats, team trends, pace of play, etc.).\n\nFormat your response as:\nMATCH SUMMARY: [your summary here]\nGOALS ANALYSIS: [betting recommendation]\nReasoning: [one sentence explanation for Under bets]"
             },
             {
               type: "image_url",
@@ -73,7 +73,16 @@ export const analyzeMatchImage = functions.https.onCall(async (data, context) =>
     if (fullResponse.includes("MATCH SUMMARY:") && fullResponse.includes("GOALS ANALYSIS:")) {
       const parts = fullResponse.split("GOALS ANALYSIS:");
       summary = parts[0].replace("MATCH SUMMARY:", "").trim();
-      bettingSuggestion = parts[1].trim();
+      
+      // Handle the goals analysis part which may include reasoning
+      let goalsAnalysis = parts[1].trim();
+      
+      // If there's a "Reasoning:" section, include it in the betting suggestion
+      if (goalsAnalysis.includes("Reasoning:")) {
+        bettingSuggestion = goalsAnalysis; // Keep the full analysis including reasoning
+      } else {
+        bettingSuggestion = goalsAnalysis;
+      }
     }
     
     // Generate random odds
