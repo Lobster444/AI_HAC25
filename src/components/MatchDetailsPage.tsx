@@ -57,9 +57,6 @@ const MatchDetailsPage: React.FC = () => {
           <span className="text-base font-semibold">Back</span>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            <span className="text-xs font-bold">300</span>
-          </div>
           <span className="text-base font-semibold">£1.19</span>
         </div>
       </div>
