@@ -162,7 +162,7 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                 <div className="bg-green-600/20 border border-green-500/50 rounded-xl p-4">
                   <div className="flex items-center space-x-2 mb-4">
                     <Target className="w-5 h-5 text-green-400" />
-                    <span className="text-green-400 font-semibold text-base">Total Goals Analysis & Betting Suggestion</span>
+                    <span className="text-green-400 font-semibold text-base">O/U Total Goals Betting Suggestion</span>
                   </div>
                   <p className="text-green-100 text-sm leading-relaxed mb-4">
                     {matchSummary.bettingSuggestion}
