@@ -172,7 +172,7 @@ const MatchDetailsPage: React.FC = () => {
             ) : (
               <div className="flex flex-col items-center">
                 <span className="text-[14px] flex items-center">
-                  <Brain className="w-4 h-4 inline-block" />&nbsp; AI Match Edge
+                  <Brain className="w-4 h-4 inline-block" />&nbsp; SmartStats AI
                 </span>
                 <span className="text-[10px]">Generates summary &amp; Reorder markets</span>
               </div>
