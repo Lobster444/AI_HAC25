@@ -173,17 +173,38 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                     <div className="bg-green-700/30 rounded-xl p-4">
                       <div className="flex items-center space-x-2 mb-3">
                         <TrendingUp className="w-5 h-5 text-green-300" />
-                        <span className="text-green-300 font-semibold text-base">Recommended bets</span>
+                        <span className="text-green-300 font-semibold text-base">Recommended Bet</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-blue-600/40 rounded-lg p-3 text-center">
-                          <p className="text-blue-200 text-xs font-semibold mb-1">Over 2.5 Goals</p>
-                          <p className="text-blue-100 text-xl font-bold">{matchSummary.overUnderOdds.over}</p>
-                        </div>
-                        <div className="bg-red-600/40 rounded-lg p-3 text-center">
-                          <p className="text-red-200 text-xs font-semibold mb-1">Under 2.5 Goals</p>
-                          <p className="text-red-100 text-xl font-bold">{matchSummary.overUnderOdds.under}</p>
-                        </div>
+                      <div className="flex justify-center">
+                        {(() => {
+                          // Determine which bet to recommend based on the betting suggestion
+                          const isOverRecommended = matchSummary.bettingSuggestion.toLowerCase().includes('over');
+                          const isUnderRecommended = matchSummary.bettingSuggestion.toLowerCase().includes('under');
+                          
+                          if (isOverRecommended) {
+                            return (
+                              <div className="bg-blue-600/40 rounded-lg p-4 text-center min-w-[140px]">
+                                <p className="text-blue-200 text-sm font-semibold mb-2">Over 2.5 Goals</p>
+                                <p className="text-blue-100 text-2xl font-bold">{matchSummary.overUnderOdds.over}</p>
+                              </div>
+                            );
+                          } else if (isUnderRecommended) {
+                            return (
+                              <div className="bg-red-600/40 rounded-lg p-4 text-center min-w-[140px]">
+                                <p className="text-red-200 text-sm font-semibold mb-2">Under 2.5 Goals</p>
+                                <p className="text-red-100 text-2xl font-bold">{matchSummary.overUnderOdds.under}</p>
+                              </div>
+                            );
+                          } else {
+                            // Default to Under if no clear recommendation
+                            return (
+                              <div className="bg-red-600/40 rounded-lg p-4 text-center min-w-[140px]">
+                                <p className="text-red-200 text-sm font-semibold mb-2">Under 2.5 Goals</p>
+                                <p className="text-red-100 text-2xl font-bold">{matchSummary.overUnderOdds.under}</p>
+                              </div>
+                            );
+                          }
+                        })()}
                       </div>
                     </div>
                   )}
