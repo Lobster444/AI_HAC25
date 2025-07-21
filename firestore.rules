@@ -25,13 +25,20 @@ service cloud.firestore {
     // Function to validate match summary document structure
     function validateMatchSummary() {
       let requiredFields = ['id', 'matchId', 'summary', 'createdAt', 'updatedAt'];
-      let allowedFields = ['id', 'matchId', 'summary', 'imageUrl', 'createdAt', 'updatedAt'];
+      let allowedFields = ['id', 'matchId', 'summary', 'imageUrl', 'bettingSuggestion', 'overUnderOdds', 'createdAt', 'updatedAt'];
       
       return request.resource.data.keys().hasAll(requiredFields) &&
              request.resource.data.keys().hasOnly(allowedFields) &&
              request.resource.data.id is string &&
              request.resource.data.matchId is string &&
              request.resource.data.summary is string &&
+             (!('bettingSuggestion' in request.resource.data) || request.resource.data.bettingSuggestion is string) &&
+             (!('overUnderOdds' in request.resource.data) || request.resource.data.overUnderOdds == null || 
+              (request.resource.data.overUnderOdds is map && 
+               'over' in request.resource.data.overUnderOdds && 
+               'under' in request.resource.data.overUnderOdds &&
+               request.resource.data.overUnderOdds.over is string &&
+               request.resource.data.overUnderOdds.under is string)) &&
              request.resource.data.createdAt is timestamp &&
              request.resource.data.updatedAt is timestamp;
     }
