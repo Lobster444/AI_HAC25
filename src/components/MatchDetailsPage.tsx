@@ -14,7 +14,7 @@ const MatchDetailsPage: React.FC = () => {
   };
 
   const headToHeadResults = [
-    { date: "Jul '25", score: "0 - 1", teamAColor: "bg-red-600", teamBColor: "bg-teal-500" },
+    { date: "Jul '25", score: "0 - 1", teamAColor: "bg-yellow-500", teamBColor: "bg-teal-500" },
     { date: "Aug '22", score: "2 - 2", teamAColor: "bg-yellow-500", teamBColor: "bg-teal-500" },
     { date: "Aug '22", score: "1 - 2", teamAColor: "bg-yellow-500", teamBColor: "bg-teal-500" }
   ];
