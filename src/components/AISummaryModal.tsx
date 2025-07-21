@@ -181,25 +181,32 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                           const isOverRecommended = matchSummary.bettingSuggestion.toLowerCase().includes('over');
                           const isUnderRecommended = matchSummary.bettingSuggestion.toLowerCase().includes('under');
                           
+                          // Parse the numeric total from the betting suggestion
+                          const suggestion = matchSummary.bettingSuggestion.toLowerCase();
+                          const match = suggestion.match(/(over|under)\s*([0-9]+(?:\.[0-9]+)?)/);
+                          const betType = match?.[1] ?? (isOverRecommended ? 'over' : 'under');
+                          const betValue = match?.[2] ?? '2.5';
+                          const betLabel = `${betType.charAt(0).toUpperCase() + betType.slice(1)} ${betValue} Goals`;
+                          
                           if (isOverRecommended) {
                             return (
                               <div className="bg-blue-600 rounded-lg px-3 py-2 w-full text-center shadow-lg">
-                                <p className="text-white text-xs font-semibold mb-1">Over 2.5 Goals</p>
+                                <p className="text-white text-xs font-semibold mb-1">{betLabel}</p>
                                 <p className="text-white text-xl font-bold">{matchSummary.overUnderOdds.over}</p>
                               </div>
                             );
                           } else if (isUnderRecommended) {
                             return (
-                              <div className="bg-blue-600 rounded-lg p-3 text-center min-w-[120px] shadow-lg">
-                                <p className="text-white text-xs font-semibold mb-1">Under 2.5 Goals</p>
+                              <div className="bg-blue-600 rounded-lg px-3 py-2 w-full text-center shadow-lg">
+                                <p className="text-white text-xs font-semibold mb-1">{betLabel}</p>
                                 <p className="text-white text-xl font-bold">{matchSummary.overUnderOdds.under}</p>
                               </div>
                             );
                           } else {
                             // Default to Under if no clear recommendation
                             return (
-                              <div className="bg-blue-600 rounded-lg p-3 text-center min-w-[120px] shadow-lg">
-                                <p className="text-white text-xs font-semibold mb-1">Under 2.5 Goals</p>
+                              <div className="bg-blue-600 rounded-lg px-3 py-2 w-full text-center shadow-lg">
+                                <p className="text-white text-xs font-semibold mb-1">{betLabel}</p>
                                 <p className="text-white text-xl font-bold">{matchSummary.overUnderOdds.under}</p>
                               </div>
                             );
