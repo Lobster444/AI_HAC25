@@ -79,7 +79,7 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
         <div className="bg-orange-500 px-5 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Brain className="w-6 h-6 text-white" />
-            <h2 className="text-xl font-bold text-white">AI Match Analysis</h2>
+            <h2 className="text-xl font-bold text-white">SmartStats AI</h2>
           </div>
           <button
             onClick={onClose}
