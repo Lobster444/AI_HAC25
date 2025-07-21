@@ -126,7 +126,7 @@ const MatchDetailsPage: React.FC = () => {
         {/* Head to Head */}
         <div className="mb-6">
           <h3 className="text-center text-base font-semibold mb-3">HEAD TO HEAD</h3>
-          <div className="space-y-3">
+          <div className="space-y-3" style={{paddingRight: '4.75rem'}}>
             {headToHeadResults.map((result, index) => (
               <div key={index} className="flex items-center">
                 <div className="w-16 text-xs text-gray-400 text-right">{result.date}</div>
