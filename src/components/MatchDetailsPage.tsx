@@ -131,9 +131,9 @@ const MatchDetailsPage: React.FC = () => {
               <div key={index} className="flex items-center">
                 <div className="w-16 text-xs text-gray-400 text-right">{result.date}</div>
                 <div className="flex-1 flex items-center">
-                  <div className={`h-2 ${result.teamAColor} rounded-l ml-3`} style={{ width: '35%' }}></div>
+                  <div className={`flex-grow h-2 ${result.teamAColor} rounded-l ml-3`}></div>
                   <div className="bg-gray-700 px-3 py-1 text-xs font-semibold min-w-fit">{result.score}</div>
-                  <div className={`h-2 ${result.teamBColor} rounded-r`} style={{ width: '35%' }}></div>
+                  <div className={`flex-grow h-2 ${result.teamBColor} rounded-r`}></div>
                 </div>
               </div>
             ))}
