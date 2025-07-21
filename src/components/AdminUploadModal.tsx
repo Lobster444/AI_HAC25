@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { X, Upload, Image, Loader2, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
-import { analyzeMatchImage } from '../lib/openai';
+import { analyzeMatchImage } from '../lib/firebaseFunctions';
 import { saveMatchSummary, MatchSummary } from '../lib/firestore';
 
 interface AdminUploadModalProps {
@@ -140,7 +140,7 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
 
       // For multiple images, we'll analyze them together by sending the first image
       // In a production app, you might want to analyze all images or combine them
-      const result = await analyzeMatchImage(base64Images[0]);
+      const result = await analyzeMatchImage(base64Images[0], matchId);
       
       if (result.success) {
         // Create a combined summary mentioning multiple images were analyzed
