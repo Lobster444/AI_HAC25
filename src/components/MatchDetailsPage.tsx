@@ -165,7 +165,7 @@ const MatchDetailsPage: React.FC = () => {
           <button
             onClick={handleAISummaryClick}
             disabled={isLoadingSummary}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-orange-400 disabled:to-orange-500 text-white px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 flex items-center space-x-2 text-sm shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:hover:scale-100"
+            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-orange-400 disabled:to-orange-500 text-white px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 flex items-center text-sm shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:hover:scale-100"
           >
             {isLoadingSummary ? (
               <>
@@ -173,10 +173,12 @@ const MatchDetailsPage: React.FC = () => {
                 <span>LOADING...</span>
               </>
             ) : (
-              <>
-                <Brain className="w-4 h-4" />
-                <span>AI SUMMARY</span>
-              </>
+              <div className="flex flex-col">
+                <span className="text-[14px] flex items-center">
+                  <Brain className="w-4 h-4 inline-block" />&nbsp; AI Match Edge
+                </span>
+                <span className="text-[10px]">Generates summary &amp; Reorder markets</span>
+              </div>
             )}
           </button>
         </div>
