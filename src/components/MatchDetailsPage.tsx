@@ -174,7 +174,7 @@ const MatchDetailsPage: React.FC = () => {
                 <span className="text-[14px] flex items-center">
                   <Brain className="w-4 h-4 inline-block" />&nbsp; SmartStats AI
                 </span>
-                <span className="text-[10px]">Generates summary &amp; Recommended Bets</span>
+                <span className="text-[10px]">Generates summary &amp; Recommended Bet</span>
               </div>
             )}
           </button>
