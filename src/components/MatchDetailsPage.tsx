@@ -129,9 +129,9 @@ const MatchDetailsPage: React.FC = () => {
         {/* Head to Head */}
         <div className="mb-6">
           <h3 className="text-center text-base font-semibold mb-3">HEAD TO HEAD</h3>
-          <div className="space-y-3 max-w-xs mx-auto">
+          <div className="space-y-3">
             {headToHeadResults.map((result, index) => (
-              <div key={index} className="flex items-center justify-center">
+              <div key={index} className="flex items-center">
                 <div className="w-16 text-xs text-gray-400 text-right">{result.date}</div>
                 <div className="flex-1 flex items-center">
                   <div className={`h-2 ${result.teamAColor} rounded-l ml-3`} style={{ width: '35%' }}></div>
