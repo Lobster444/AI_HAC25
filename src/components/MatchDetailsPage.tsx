@@ -173,7 +173,7 @@ const MatchDetailsPage: React.FC = () => {
                 <span>LOADING...</span>
               </>
             ) : (
-              <div className="flex flex-col text-center">
+              <div className="flex flex-col">
                 <span className="text-[14px] flex items-center">
                   <Brain className="w-4 h-4 inline-block" />&nbsp; AI Match Edge
                 </span>
