@@ -183,7 +183,7 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
                           
                           if (isOverRecommended) {
                             return (
-                              <div className="bg-blue-600 rounded-lg p-3 text-center min-w-[120px] shadow-lg">
+                              <div className="bg-blue-600 rounded-lg px-3 py-2 w-full text-center shadow-lg">
                                 <p className="text-white text-xs font-semibold mb-1">Over 2.5 Goals</p>
                                 <p className="text-white text-xl font-bold">{matchSummary.overUnderOdds.over}</p>
                               </div>
