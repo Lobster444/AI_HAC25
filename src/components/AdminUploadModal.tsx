@@ -357,7 +357,7 @@ const AdminUploadModal: React.FC<AdminUploadModalProps> = ({ isOpen, onClose, on
                 </div>
                 {analysisResult.overUnderOdds && (
                   <div>
-                    <h4 className="text-orange-300 font-medium mb-1 text-xs">Generated Odds:</h4>
+                    <h4 className="text-orange-300 font-medium mb-1 text-xs">Recommended bets:</h4>
                     <div className="flex space-x-4 text-sm">
                       <span className="text-green-400">Over: {analysisResult.overUnderOdds.over}</span>
                       <span className="text-blue-400">Under: {analysisResult.overUnderOdds.under}</span>
