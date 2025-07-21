@@ -120,7 +120,7 @@ Current odds favor Team B at 2.20, which appears reasonable given their form and
               <div className="bg-gray-700 rounded-xl p-4">
                 <div className="flex items-center space-x-2 mb-4">
                   <Brain className="w-5 h-5 text-orange-500" />
-                  <span className="text-orange-400 font-semibold text-base">AI Generated Summary</span>
+                  <span className="text-orange-400 font-semibold text-base">AI Pre-match Summary</span>
                 </div>
                 <div className="text-gray-200 leading-relaxed text-sm">
                   {matchSummary?.summary.split('\n').map((line, index) => {
